@@ -33,7 +33,7 @@ function onSearch() {
       clear();
       countryInfoForUser(country[0]);
     }
-  });
+  }).catch(console.log);
 }
 
 function countryListForUser(item) {

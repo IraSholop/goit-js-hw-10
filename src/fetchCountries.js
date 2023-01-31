@@ -10,5 +10,5 @@ export function fetchCountries(name) {
         );
       }
       return country;
-    });
+    }).catch(console.log);
 }
