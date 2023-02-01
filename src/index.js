@@ -18,22 +18,35 @@ function onSearch() {
     clear();
     return;
   }
-  fetchCountries(value).then(country => {
-    if (country.length > 10) {
-      Notiflix.Notify.info(
-        'Too many matches found. Please enter a more specific name.'
-      );
-    } else if (country.length < 10 && country.length > 2) {
-      for (let i = 0; i < country.length; i++) {
+  fetchCountries(value)
+    .then(country => {
+      if (country.status === 404) {
         clear();
-        countryListForUser(country[i]);
+        throw new Error(
+          Notiflix.Notify.failure('Oops, there is no country with that name')
+        );
+      } else {
+        return country;
       }
-      userInterface = '';
-    } else {
-      clear();
-      countryInfoForUser(country[0]);
-    }
-  }).catch(console.log);
+    })
+    .then(country => {
+      if (country.length > 10) {
+        Notiflix.Notify.info(
+          'Too many matches found. Please enter a more specific name.'
+        );
+        clear();
+      } else if (country.length < 10 && country.length > 2) {
+        for (let i = 0; i < country.length; i++) {
+          clear();
+          countryListForUser(country[i]);
+        }
+        userInterface = '';
+      } else {
+        clear();
+        countryInfoForUser(country[0]);
+      }
+    })
+    .catch(console.log);
 }
 
 function countryListForUser(item) {
